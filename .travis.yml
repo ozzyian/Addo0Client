@@ -4,6 +4,4 @@ node_js:
 install:
   yarn
 script:
-  yarn test
-after_script:
-  nyc mocha --report lcovonly -- -R spec && codecov
+  yarn testcov-travis

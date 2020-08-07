@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "testcov-travis": "nyc mocha ./src/test/*.js --report lcovonly -- -R spec && codecov",
     "test": "nyc mocha ./src/test/*.js",
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
