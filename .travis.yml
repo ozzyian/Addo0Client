@@ -4,4 +4,6 @@ node_js:
 install:
   yarn
 script:
-  yarn testcov-travis
+  yarn test
+after_success:
+  yarn coverage
