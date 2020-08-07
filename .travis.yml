@@ -5,3 +5,4 @@ install:
   yarn
 script:
   yarn test
+  nyc mocha --report lcovonly -- -R spec && codecov
