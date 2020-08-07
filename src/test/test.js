@@ -1,16 +1,13 @@
-const AddonManager = require("../renderer/services/addon_manager.js");
-var assert = require('chai').assert;
+const AddonManager = require('../renderer/services/addon_manager.js');
+const assert = require('chai').assert;
 
-let addonManager = new AddonManager(__dirname);
+const addonManager = new AddonManager(__dirname);
 
-
-describe("Get list of addons", () => {
-    it("Returns array with all addons", () => {
-      return addonManager.addonList().then(result => {
-        assert.isArray(result, "Should be an array")
-        assert.equal(result.length, );
-      })
-    })
-  })
-
-  
+describe('Get list of addons', () => {
+  it('Returns array with all addons', () => {
+    return addonManager.addonList().then((result) => {
+      assert.isArray(result, 'Should be an array');
+      assert.equal(result.length, 1, 'Should equal length of 1');
+    });
+  });
+});
