@@ -17,8 +17,8 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const expected = await fsPromises.readdir(tmpDir.name);
       const actual = await aM.addonList();
 
-      expect(actual[0]).to.equal(
-        expected[0],
+      expect(actual).to.deep.equal(
+        expected,
         'actual and expected have equal first element',
       );
       tmpFile.removeCallback();
@@ -41,8 +41,7 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const aM = new AddonManager(__dirname);
       const data = await aM.getAddonDataFromToc(tmpobj.name);
       const expected = {id: '3358', version: '1.13.55'};
-      expect(data.id).to.equal(expected.id);
-      expect(data.version).to.equal(expected.version);
+      expect(data).to.deep.equal(expected);
       tmpobj.removeCallback();
     });
 
@@ -53,8 +52,8 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const aM = new AddonManager(__dirname);
       const data = await aM.getAddonDataFromToc(tmpobj.name);
       const expected = {id: '3358'};
-      expect(data.id).to.equal(expected.id);
-      expect(data.version).to.equal(undefined);
+      expect(data).to.deep.equal(expected);
+      expect(data).to.not.have.property('version');
 
       tmpobj.removeCallback();
     });
@@ -66,8 +65,8 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const aM = new AddonManager(__dirname);
       const data = await aM.getAddonDataFromToc(tmpobj.name);
       const expected = {version: '1.13.55'};
-      expect(data.version).to.equal(expected.version);
-      expect(data.id).to.equal(undefined);
+      expect(data).to.deep.equal(expected);
+      expect(data).to.not.have.property('id');
 
       tmpobj.removeCallback();
     });
