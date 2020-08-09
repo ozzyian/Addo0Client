@@ -12,7 +12,7 @@ module.exports = {
   },
   rules: {
     'indent': 'off',
-    'inebreak-style': 0,
+    'linebreak-style': ['error', (process.platform === 'win32' ? 'windows' : 'unix')],
     'tenary': 'off',
     'operator-linebreak': [2, 'after', {'overrides': {'?': 'ignore', ':': 'ignore'}}],
   },
