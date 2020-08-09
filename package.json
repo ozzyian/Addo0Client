@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "bootstrap": "^4.5.2",
+    "n-readlines": "^1.0.0",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "codecov": "^3.7.2",
     "electron": "8.2.0",
     "electron-builder": "^22.8.0",
@@ -25,6 +27,7 @@
     "eslint-config-google": "^0.14.0",
     "mocha": "^8.1.1",
     "nyc": "^15.1.0",
+    "tmp": "^0.2.1",
     "webpack": "~4.44.1"
   }
 }
