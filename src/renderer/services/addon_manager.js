@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fetch = require('node-fetch');
 const lineByLine = require('n-readlines');
 /**
  * Handles the addons locally.
@@ -37,7 +38,7 @@ module.exports = class AddonManager {
 
     // not my fault the library won't adhear to common coding practises
     // eslint-disable-next-line new-cap
-    const liner = new lineByLine(tocFile);
+    const liner = new lineByLine(this.wowPath + '/' + tocFile);
     while ((line = liner.next())) {
       if (line.includes('Curse-Project-ID:')) {
         data['id'] = line.toString('utf-8').replace(/[^\d.]/g, '');
@@ -54,5 +55,21 @@ module.exports = class AddonManager {
     }
 
     throw new Error('Could not find an ID');
+  }
+
+  /**
+   *
+   * @param {String} addonId
+   * @return {Promise} returns a promise that may contain an error or addon data
+   */
+  async getAddonData(addonId) {
+    try {
+      const response = await fetch(
+        `https://addons-ecs.forgesvc.net/api/v2/addon/${addonId}`,
+      );
+      return response.json();
+    } catch (err) {
+      return err;
+    }
   }
 };
