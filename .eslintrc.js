@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 module.exports = {
   env: {
     browser: true,
@@ -12,6 +13,8 @@ module.exports = {
   rules: {
     'indent': 'off',
     'inebreak-style': 0,
+    'tenary': 'off',
+    'operator-linebreak': [2, 'after', {'overrides': {'?': 'ignore', ':': 'ignore'}}],
   },
   parserOptions: {
     sourceType: 'module',
