@@ -75,13 +75,16 @@ describe('Tests the functionality of the AddonManager class.', () => {
         dir: tmpDir.name,
         name: fileName,
       });
-      fs.writeFileSync(tmpobj.name, '## Version: 1.13.55');
+      fs.writeFileSync(
+        tmpobj.name,
+        '## X-Curse-Project-ID: 3358\n## RequiredDeps: DBM-Core',
+      );
 
+      const reqDeps = ['DBM-Core'];
       const aM = new AddonManager(tmpDir.name);
       const data = await aM.getAddonDataFromToc(fileName);
-      const expected = {version: '1.13.55'};
+      const expected = {id: '3358', requiredDeps: reqDeps};
       expect(data).to.deep.equal(expected);
-      expect(data).to.not.have.property('id');
 
       tmpobj.removeCallback();
       tmpDir.removeCallback();

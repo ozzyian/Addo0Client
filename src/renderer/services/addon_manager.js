@@ -32,7 +32,6 @@ module.exports = class AddonManager {
    */
   async getAddonDataFromToc(tocFile) {
     let line;
-    let verFound = false;
     let idFound = false;
     const data = {};
 
@@ -46,11 +45,18 @@ module.exports = class AddonManager {
       }
       if (line.includes('Version:')) {
         data['version'] = line.toString('utf-8').replace(/[^\d.]/g, '');
-        verFound = true;
+      }
+
+      if (line.includes('RequiredDeps:')) {
+        data['requiredDeps'] = line
+          .toString('utf-8')
+          .replace('## RequiredDeps:', '')
+          .trim()
+          .split(' ');
       }
     }
 
-    if (verFound || idFound) {
+    if (idFound) {
       return data;
     }
 
