@@ -30,6 +30,19 @@ module.exports = class DbClient {
   }
   /**
    *
+   * @param {*} addonId the id of the addon
+   * @param {String} specific path to the specific data.
+   */
+  async getAddonDataSpecific(addonId, specific) {
+    try {
+      return await settings.get(addonId + '.' + specific);
+    } catch (err) {
+      throw new Error('Could not retrieve data from database...');
+    }
+  }
+
+  /**
+   *
    * @param {*} addonId the id of the addon data to be removed.
    */
   async removeAddonData(addonId) {

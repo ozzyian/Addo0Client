@@ -33,10 +33,19 @@ describe('Tests the functionality of the local database', () => {
       );
     });
   });
+  describe('getAddonDataSpecific', () => {
+    it('Returns the id for stored addon data', async () => {
+      const actual = await db.getAddonDataSpecific(tempAddon.id, 'id');
+      expect(actual).to.be.equal(tempAddon.id);
+    });
+  });
   describe('removeAddonData()', () => {
     it('Returns true when and data was successfully removed', async () => {
       const actual = await db.removeAddonData(tempAddon.id);
       expect(actual).to.equal(true);
+      await expect(db.getAddonData(tempAddon.id)).to.be.rejectedWith(
+        'Could not retrieve data from database...',
+      );
     });
   });
 });
