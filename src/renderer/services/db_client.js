@@ -6,7 +6,8 @@ module.exports = class DbClient {
    */
   async setAddonData(addon) {
     try {
-      return await settings.set(addon.id, addon);
+      await settings.set(addon.id, addon);
+      return true;
     } catch (err) {
       throw new Error('Invalid parameter...');
     }
