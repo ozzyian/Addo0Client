@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "test": "nyc mocha ./src/test/*.js",
-    "test-travis": "nyc --reporter=lcov mocha ./src/test/*.js",
+    "test": "nyc electron-mocha ./src/test/*.js",
+    "test-travis": "nyc --reporter=lcov electron-mocha ./src/test/*.js",
     "coverage": "codecov",
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.5.2",
+    "electron-settings": "^4.0.2",
     "n-readlines": "^1.0.0",
     "node-fetch": "^2.6.0",
     "source-map-support": "^0.5.19"
@@ -23,6 +24,7 @@
     "codecov": "^3.7.2",
     "electron": "8.2.0",
     "electron-builder": "^22.8.0",
+    "electron-mocha": "^9.0.1",
     "electron-webpack": "^2.8.2",
     "eslint": "^7.6.0",
     "eslint-config-google": "^0.14.0",
