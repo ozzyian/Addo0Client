@@ -35,7 +35,12 @@ module.exports = class DbClient {
    */
   async getAddonDataSpecific(addonId, specific) {
     try {
-      return await settings.get(addonId + '.' + specific);
+      const res = await settings.get(addonId + '.' + specific);
+      if (res === undefined) {
+        throw new Error('Could not retrieve data from database...');
+      } else {
+        return res;
+      }
     } catch (err) {
       throw new Error('Could not retrieve data from database...');
     }

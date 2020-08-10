@@ -38,6 +38,11 @@ describe('Tests the functionality of the local database', () => {
       const actual = await db.getAddonDataSpecific(tempAddon.id, 'id');
       expect(actual).to.be.equal(tempAddon.id);
     });
+    it('Throws an error when specific data can not be retrieved', async () => {
+      await expect(
+        db.getAddonDataSpecific(tempAddon.id, 'data.does.not.exist'),
+      ).to.be.rejectedWith('Could not retrieve data from database...');
+    });
   });
   describe('removeAddonData()', () => {
     it('Returns true when and data was successfully removed', async () => {
