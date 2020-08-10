@@ -28,4 +28,12 @@ module.exports = class DbClient {
       throw new Error('Could not retrieve data from database...');
     }
   }
+  /**
+   *
+   * @param {*} addonId the id of the addon data to be removed.
+   */
+  async removeAddonData(addonId) {
+    await settings.unset(addonId);
+    return true;
+  }
 };

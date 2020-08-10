@@ -33,4 +33,10 @@ describe('Tests the functionality of the local database', () => {
       );
     });
   });
+  describe('removeAddonData()', () => {
+    it('Returns true when and data was successfully removed', async () => {
+      const actual = await db.removeAddonData(tempAddon.id);
+      expect(actual).to.equal(true);
+    });
+  });
 });
