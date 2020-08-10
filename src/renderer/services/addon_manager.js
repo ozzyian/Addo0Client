@@ -46,14 +46,6 @@ module.exports = class AddonManager {
       if (line.includes('Version:')) {
         data['version'] = line.toString('utf-8').replace(/[^\d.]/g, '');
       }
-
-      if (line.includes('RequiredDeps:')) {
-        data['requiredDeps'] = line
-          .toString('utf-8')
-          .replace('## RequiredDeps:', '')
-          .trim()
-          .split(' ');
-      }
     }
 
     if (idFound) {
