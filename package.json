@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.5.2",
+    "mocha": "^8.1.1",
     "n-readlines": "^1.0.0",
     "node-fetch": "^2.6.0",
     "source-map-support": "^0.5.19"
@@ -21,12 +22,11 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.7.2",
-    "electron": "8.2.4",
+    "electron": "9.2.0",
     "electron-builder": "^22.8.0",
     "electron-webpack": "^2.8.2",
     "eslint": "^7.6.0",
     "eslint-config-google": "^0.14.0",
-    "mocha": "^8.1.1",
     "nock": "^13.0.3",
     "nyc": "^15.1.0",
     "tmp": "^0.2.1",
