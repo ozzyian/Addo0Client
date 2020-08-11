@@ -16,7 +16,8 @@
     "mocha": "^8.1.1",
     "n-readlines": "^1.0.0",
     "node-fetch": "^2.6.0",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "sqlite3": "^5.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
