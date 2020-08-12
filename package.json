@@ -28,7 +28,7 @@
     "electron-webpack": "^2.8.2",
     "eslint": "^7.6.0",
     "eslint-config-google": "^0.14.0",
-    "nock": "^13.0.3",
+    "nock": "^13.0.4",
     "nyc": "^15.1.0",
     "tmp": "^0.2.1",
     "webpack": "~4.44.1"
