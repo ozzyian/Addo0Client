@@ -18,10 +18,9 @@ jobs:
           name: Install Dependencies
           command: yarn
       - save_cache:
-          keys:
-            - node-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - ~/usr/local/lib/node_modules
+          key: node-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Run tests
           command: yarn test-clci
