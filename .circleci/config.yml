@@ -8,9 +8,6 @@ jobs:
       - image: circleci/node:14-browsers
     steps:
       - checkout
-      - run:
-          name: Update yarn
-          command: 'sudo yarn'
       - restore_cache:
           keys:
             - node-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
@@ -27,4 +24,4 @@ jobs:
           name: Run tests
           command: yarn test-clci
       - codecov/upload:
-          file: './coverage.lcov'
+          file: './coverage/lcov.info'
