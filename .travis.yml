@@ -4,6 +4,7 @@ language: node_js
 node_js:
   - 14
 sudo: required
+dist: xenial
 services:
   - xvfb
 
@@ -14,7 +15,6 @@ install:
   - yarn
 
 before_script:
-  - 'export DISPLAY=:99.0'
   - sleep 3 # give xvfb some time to start
 
 script: yarn test-travis
