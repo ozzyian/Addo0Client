@@ -20,4 +20,4 @@ jobs:
             - ./node_modules
       - run:
           name: Run tests
-          command: yarn test-travis
+          command: yarn test-clci
