@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "test": "nyc mocha ./src/test/*.js",
-    "test-travis": "nyc --reporter=lcov mocha ./src/test/*.js",
+    "test-clci": "nyc --reporter=text-lcov > coverage.lcov mocha ./src/test/*.js",
     "coverage": "codecov",
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
@@ -30,7 +30,9 @@
     "eslint-config-google": "^0.14.0",
     "nock": "^13.0.4",
     "nyc": "^15.1.0",
+    "spectron": "^11.1.0",
     "tmp": "^0.2.1",
-    "webpack": "~4.44.1"
+    "webpack": "~4.44.1",
+    "xvfb-maybe": "^0.2.1"
   }
 }
