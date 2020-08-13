@@ -15,7 +15,6 @@ jobs:
           name: Install Dependencies
           command: yarn
       - save_cache:
-          - save_cache: 
           key: '-v1-node-cache-{{ checksum "yarn.lock" }}-{{ arch }}'
           paths:
             - ./node_modules
