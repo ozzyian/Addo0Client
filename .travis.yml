@@ -18,13 +18,4 @@ install:
 script:
   - yarn test-travis
 
-cache:
-  directories:
-    - node_modules
-
 after_success: yarn coverage
-
-notifications:
-  email:
-    on_success: never
-    on_failure: change
