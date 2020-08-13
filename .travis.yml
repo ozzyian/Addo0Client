@@ -3,26 +3,23 @@ os:
 language: node_js
 node_js:
   - 14
-sudo: required
-dist: xenial
+
 services:
   - xvfb
-
-addons:
-  chrome: stable
 
 install:
   - yarn
 
-before_script:
-  - sleep 3 # give xvfb some time to start
-
 script:
-  - xvfb-run --server-args="-screen 0 1024x768x24" make test
-  - test-travis
+  - yarn test-travis
 
 cache:
   directories:
     - node_modules
 
 after_success: yarn coverage
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
