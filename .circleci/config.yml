@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     working_directory: ~/repo
@@ -24,3 +26,5 @@ jobs:
       - run:
           name: Run tests
           command: yarn test-clci
+      - codecov/upload:
+          file: './coverage/'
