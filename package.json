@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "test": "nyc mocha ./src/test/*.js",
-    "test-travis": "yarn xvfb-maybe nyc --reporter=lcov mocha ./src/test/*.js",
+    "test-travis": "nyc --reporter=lcov mocha ./src/test/*.js",
     "coverage": "codecov",
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
