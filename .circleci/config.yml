@@ -8,14 +8,14 @@ jobs:
       - image: circleci/node:14-browsers
     steps:
       - checkout
-      - run:
-          name: Update yarn
-          command: 'sudo yarn'
       - restore_cache:
           keys:
             - node-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
             - node-v1-{{ .Branch }}-
             - node-v1-
+      - run:
+          name: Update yarn
+          command: 'sudo yarn'
       - run:
           name: Install Dependencies
           command: yarn
