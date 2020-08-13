@@ -2,11 +2,18 @@
 /* eslint-disable require-jsdoc */
 'use strict';
 
-import {app, BrowserWindow} from 'electron';
-import * as path from 'path';
-import {format as formatUrl} from 'url';
+const {app, BrowserWindow} = require('electron');
+const path = require('path');
+const {format} = require('url');
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+let isDevelopment;
+if (process.env.NODE_ENV !== 'production') {
+  isDevelopment = false;
+} else if (process.env.NODE_ENV !== 'testing') {
+  isDevelopment = false;
+} else {
+  isDevelopment = true;
+}
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
@@ -24,10 +31,9 @@ function createMainWindow() {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
   } else {
     window.loadURL(
-      formatUrl({
+      format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file',
-        slashes: true,
       }),
     );
   }
