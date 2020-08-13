@@ -27,4 +27,4 @@ jobs:
           name: Run tests
           command: yarn test-clci
       - codecov/upload:
-          file: './coverage/'
+          file: './coverage/lcov-report/index.html'
