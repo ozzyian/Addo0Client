@@ -17,7 +17,9 @@ install:
 before_script:
   - sleep 3 # give xvfb some time to start
 
-script: xvfb-run --server-args="-screen 0 1024x768x24" yarn test-travis
+script:
+  - xvfb-run --server-args="-screen 0 1024x768x24" make test
+  - test-travis
 
 cache:
   directories:
