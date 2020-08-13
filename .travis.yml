@@ -1,9 +1,19 @@
+os:
+  - linux
 language: node_js
 node_js:
   - 14
-install:
-  yarn
-script:
-  yarn test-travis
-after_success:
-  yarn coverage
+install: yarn
+
+before_script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DISPLAY=:99.0; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh -e /etc/init.d/xvfb start; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sleep 3; fi
+
+script: yarn test-travis
+
+cache:
+  directories:
+    - node_modules
+
+after_success: yarn coverage
