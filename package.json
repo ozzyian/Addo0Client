@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "test": "nyc mocha ./src/test/*.js",
-    "test-clci": "nyc --reporter=lcov mocha ./src/test/*.js",
+    "test-clci": "nyc --reporter=text-lcov > coverage.lcov mocha ./src/test/*.js",
     "coverage": "codecov",
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
