@@ -10,12 +10,13 @@ jobs:
           name: Update yarn
           command: 'sudo yarn'
       - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: '-v1-node-cache-{{ checksum "yarn.lock" }}-{{ arch }}'
       - run:
           name: Install Dependencies
           command: yarn
       - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          - save_cache: 
+          key: '-v1-node-cache-{{ checksum "yarn.lock" }}-{{ arch }}'
           paths:
             - ./node_modules
       - run:
