@@ -9,17 +9,18 @@ jobs:
     steps:
       - checkout
       - restore_cache:
+          name: Restore Yarn Package Cache
           keys:
-            - node-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - node-v1-{{ .Branch }}-
+            - node-v1-{{ checksum "yarn.lock" }}
             - node-v1-
       - run:
           name: Install Dependencies
-          command: yarn
+          command: yarn install --immutable
       - save_cache:
+          name: Save Yarn Package Cache
+          key: node-v1-{{ checksum "yarn.lock" }}
           paths:
-            - ~/usr/local/lib/node_modules
-          key: node-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - ~/.cache/yarn
       - run:
           name: Run tests
           command: yarn test-clci
