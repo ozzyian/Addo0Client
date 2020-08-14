@@ -2,23 +2,18 @@
 /* eslint-disable require-jsdoc */
 'use strict';
 
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, nativeTheme} = require('electron');
 const path = require('path');
 const {format} = require('url');
 
-let isDevelopment;
-if (process.env.NODE_ENV !== 'production') {
-  isDevelopment = false;
-} else if (process.env.NODE_ENV !== 'testing') {
-  isDevelopment = false;
-} else {
-  isDevelopment = true;
-}
+const isDevelopment =
+  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'testing';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
 
 function createMainWindow() {
+  nativeTheme.themeSource = 'light';
   const window = new BrowserWindow({
     webPreferences: {nodeIntegration: true},
   });
