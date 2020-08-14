@@ -27,13 +27,12 @@ describe('Application launch', function () {
     }
   });
 
-  it('shows an initial window', function () {
-    return app.client.getWindowCount().then(function (count) {
-      assert.equal(count, 1);
-    });
+  it('shows an initial window', async () => {
+    const windows = await app.client.getWindowCount();
+    expect(windows).to.be.equal(1);
   });
   it('has the correct title', async () => {
     const title = await app.client.getTitle();
-    return assert.equal(title, 'AddonClient');
+    expect(title).to.be.equal('AddonClient');
   });
 });
