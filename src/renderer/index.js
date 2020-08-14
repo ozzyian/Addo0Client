@@ -6,5 +6,6 @@ if (window.matchMedia('(prefers-color-scheme:dark)').matches) {
 }
 
 const header = document.createElement('h1');
-header.innerText = 'En header';
+header.innerText = 'AddonClient';
+header.setAttribute('id', 'header');
 body.appendChild(header);

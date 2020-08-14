@@ -35,4 +35,9 @@ describe('Application launch', function () {
     const title = await app.client.getTitle();
     expect(title).to.be.equal('AddonClient');
   });
+  it('has an h1 element with inner text', async () => {
+    const header = await app.client.$('#header');
+    const text = await header.getText();
+    expect(text).to.be.equal('AddonClient');
+  });
 });
