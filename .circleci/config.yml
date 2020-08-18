@@ -23,6 +23,6 @@ jobs:
             - ~/.cache/yarn
       - run:
           name: Run tests
-          command: yarn test-clci
+          command: yarn test
       - codecov/upload:
           file: './coverage/lcov.info'
