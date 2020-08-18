@@ -46,6 +46,9 @@
     "electron": "^9.2.0",
     "electron-builder": "^22.8.0",
     "electron-rebuild": "^1.11.0",
+    "eslint": "^7.7.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.20.6",
     "foreman": "^3.0.1",
     "nock": "^13.0.4",
     "tmp": "^0.2.1"
