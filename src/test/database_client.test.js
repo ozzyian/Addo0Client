@@ -1,21 +1,17 @@
-const DatabaseClient = require('../renderer/services/database_client.js');
+const DatabaseClient = require('../electron/services/database_client.js');
 const fs = require('fs');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-const expect = chai.expect;
-chai.use(chaiAsPromised);
 
 // Combined tests for dao.js and database_client.js.
 // TODO separate dao functonality into separate test file.
 describe('Tests to validate the DatabaseClient class', () => {
   let db;
   let tempAddonData;
-  before(() => {
+  beforeAll(() => {
     const fileData = fs.readFileSync(__dirname + '/resources/addon_info.json');
     tempAddonData = JSON.parse(fileData);
   });
   beforeEach(async () => {
-    db = new DatabaseClient('./src/test/resources/database.db');
+    db = new DatabaseClient(':memory:');
     await db.createTable();
   });
   describe('addAddon(), getAddonData()', () => {
@@ -24,22 +20,19 @@ describe('Tests to validate the DatabaseClient class', () => {
       const res = await db.getAddonData(tempAddonData.id);
       const actual = JSON.parse(res.data);
 
-      expect(addRes).to.deep.equal({
+      expect(addRes).toEqual({
         lastID: undefined,
         changes: undefined,
       });
-      expect(actual).to.deep.equal(tempAddonData);
+      expect(actual).toEqual(tempAddonData);
     });
     it('Throws an error when trying to add addon with same id', async () => {
-      await expect(db.addAddonData(tempAddonData)).to.be.rejectedWith(
-        'UNIQUE constraint failed: addons.id',
-      );
+      await db.addAddonData(tempAddonData);
+      await expect(db.addAddonData(tempAddonData)).rejects.toThrow();
     });
     it('Throws an error when table does not exist', async () => {
       await db.resetDatabase();
-      await expect(db.getAddonData(tempAddonData.id)).to.be.rejectedWith(
-        'no such table: addons',
-      );
+      await expect(db.getAddonData(tempAddonData.id)).rejects.toThrow();
     });
   });
 
@@ -48,26 +41,24 @@ describe('Tests to validate the DatabaseClient class', () => {
       await db.addAddonData(tempAddonData);
       const expected = tempAddonData;
       const actual = await db.getAll();
-      expect(JSON.parse(actual[0].data)).to.deep.equal(expected);
+      expect(JSON.parse(actual[0].data)).toEqual(expected);
     });
     it('Throws an error when table does not exist', async () => {
       await db.resetDatabase();
-      await expect(db.getAll()).to.be.rejectedWith('no such table: addons');
+      await expect(db.getAll()).rejects.toThrow();
     });
   });
   describe('deleteAddonData()', () => {
     it('Should successfully delete an entry in the database', async () => {
       const res = await db.deleteAddonData(tempAddonData.id);
-      expect(res).to.deep.equal({
+      expect(res).toEqual({
         lastID: undefined,
         changes: undefined,
       });
     });
     it('Throws an error when table does not exist', async () => {
       await db.resetDatabase();
-      await expect(db.deleteAddonData(tempAddonData.id)).to.be.rejectedWith(
-        'no such table: addons',
-      );
+      await expect(db.deleteAddonData(tempAddonData.id)).rejects.toThrow();
     });
   });
 });

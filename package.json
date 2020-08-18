@@ -1,40 +1,59 @@
 {
-  "name": "electron-webpack-quick-start",
-  "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {
-    "test": "nyc mocha ./src/test/*.js",
-    "test-clci": "nyc --reporter=lcov mocha ./src/test/*.js",
-    "coverage": "codecov",
-    "dev": "electron-webpack dev",
-    "compile": "electron-webpack",
-    "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
-  },
+  "name": "addon-client",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "@popperjs/core": "^2.4.4",
-    "bootstrap": "^4.5.2",
-    "jquery": "^3.5.1",
-    "mocha": "^8.1.1",
+    "@testing-library/dom": "^7.22.2",
+    "@testing-library/jest-dom": "^5.11.3",
+    "@testing-library/react": "^10.4.8",
+    "@testing-library/user-event": "^12.1.1",
     "n-readlines": "^1.0.0",
     "node-fetch": "^2.6.0",
-    "source-map-support": "^0.5.19",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.3",
     "sqlite3": "^5.0.0"
   },
+  "homepage": "./",
+  "main": "public/electron.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --coverage",
+    "eject": "react-scripts eject",
+    "dev": "nf start",
+    "electron": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "react-scripts build && electron-builder --win -p always"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "codecov": "^3.7.2",
-    "electron": "9.2.0",
+    "@types/jest": "^26.0.10",
+    "electron": "^9.2.0",
     "electron-builder": "^22.8.0",
-    "electron-webpack": "^2.8.2",
-    "eslint": "^7.6.0",
-    "eslint-config-google": "^0.14.0",
+    "electron-rebuild": "^1.11.0",
+    "foreman": "^3.0.1",
     "nock": "^13.0.4",
-    "nyc": "^15.1.0",
-    "spectron": "^11.1.0",
-    "tmp": "^0.2.1",
-    "webpack": "~4.44.1",
-    "xvfb-maybe": "^0.2.1"
+    "tmp": "^0.2.1"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/electron/services/*.js",
+      "src/react/{!(serviceWorker),}.js"
+    ]
   }
 }
