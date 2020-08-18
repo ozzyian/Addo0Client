@@ -23,7 +23,9 @@ describe('Tests the functionality of the AddonManager class.', () => {
     });
     it('Returns an error when dir is not an actual directory', async () => {
       const aM = new AddonManager('NON EXISTING DIR');
-      await expect(aM.addonList()).rejects.toThrow();
+      await expect(aM.addonList()).rejects.toEqual(
+        new Error('Folder does not contain any elements...'),
+      );
     });
   });
   describe('getAddonDataFromToc()', () => {
@@ -94,7 +96,9 @@ describe('Tests the functionality of the AddonManager class.', () => {
       fs.writeFileSync(tmpobj.name, 'non id line...');
 
       const aM = new AddonManager(tmpDir.name);
-      await expect(aM.getAddonDataFromToc(fileName)).rejects.toThrow();
+      await expect(aM.getAddonDataFromToc(fileName)).rejects.toEqual(
+        new Error('Could not find an ID'),
+      );
       tmpobj.removeCallback();
       tmpDir.removeCallback();
     });
@@ -115,7 +119,11 @@ describe('Tests the functionality of the AddonManager class.', () => {
 
     it('Throws an error when addon data cant be fetched', async () => {
       const aM = new AddonManager(__dirname);
-      await expect(aM.getAddonData('8')).rejects.toThrow();
+      await expect(aM.getAddonData('8')).rejects.toEqual(
+        new Error(
+          'invalid json response body at https://addons-ecs.forgesvc.net/api/v2/addon/8 reason: Unexpected end of JSON input',
+        ),
+      );
     });
   });
 });

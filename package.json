@@ -53,6 +53,7 @@
     "eslint-plugin-react": "^7.20.6",
     "foreman": "^3.0.1",
     "nock": "^13.0.4",
+    "react-test-renderer": "^16.13.1",
     "tmp": "^0.2.1"
   },
   "jest": {

@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test renders the snapshot 1`] = `
+<div
+  className="list-group-item"
+  disabled={false}
+  onClick={[Function]}
+>
+  id: 
+  
+</div>
+`;
