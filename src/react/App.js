@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import AddonList from './components/AddonList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-const ipc = window.require('electron').ipcRenderer;
+const ipc = require('electron').ipcRenderer;
 
 class App extends React.Component {
   constructor(props) {

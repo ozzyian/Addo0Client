@@ -2,7 +2,6 @@ import React from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import AddonListItem from './AddonListItem';
 import AddonManager from '../../electron/services/addon_manager';
-const electron = window.require('electron');
 
 class AddonList extends React.Component {
   render() {

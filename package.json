@@ -57,8 +57,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/electron/services/*.js",
-      "src/react/{!(serviceWorker),}.js"
+      "src/electron/services/*.js"
     ]
   }
 }
