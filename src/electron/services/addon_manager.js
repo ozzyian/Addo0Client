@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = window.require('fs');
 const fetch = require('node-fetch');
 const lineByLine = require('n-readlines');
 /**

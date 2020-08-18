@@ -1,29 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
 import Button from 'react-bootstrap/Button';
-import './App.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import AddonList from './components/AddonList';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+const ipc = window.require('electron').ipcRenderer;
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Button>React button</Button>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {reply: ''};
+  }
+  componentDidMount() {
+    const self = this;
+    ipc.on('asynReply', (event, data) => {
+      console.log('Message received');
+      self.setState({reply: data});
+    });
+  }
+  buttonClick = () => {
+    ipc.send('aSynMessage', 'A async message to main');
+  };
+  render() {
+    return (
+      <Container className="App" fluid>
+        <AddonList />
+        <Button onClick={this.buttonClick}>Skicka meddelande</Button>
+        <h1 id="mess">Meddelande: {this.state.reply}</h1>
+      </Container>
+    );
+  }
 }
 
 export default App;

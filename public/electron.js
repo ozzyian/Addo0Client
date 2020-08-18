@@ -1,8 +1,9 @@
-const electron = require('electron');
+const {app, ipcMain, BrowserWindow} = require('electron');
 // Module to control application life.
-const app = electron.app;
+//const app = electron.app;
+
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+//const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
 const url = require('url');
@@ -13,7 +14,13 @@ let mainWindow;
 const isDev = process.env.NODE_ENV !== 'testing';
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  });
 
   // and load the index.html of the app.
   const startUrl =
@@ -60,6 +67,14 @@ app.on('activate', function () {
     createWindow();
   }
 });
+ipcMain.on('synMessage', (event, args) => {
+  console.log(args);
+  event.returnValue = 'Main said I received your Sync message';
+});
 
+ipcMain.on('aSynMessage', (event, args) => {
+  console.log(args);
+  event.sender.send('asynReply', 'Main said: Async message received');
+});
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
