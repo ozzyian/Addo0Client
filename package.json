@@ -16,7 +16,7 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.3.0",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.0"
   },
   "scripts": {
     "start": "rescripts start",
@@ -52,6 +52,7 @@
     "eslint-config-google": "^0.14.0",
     "fake-indexeddb": "^3.1.2",
     "nock": "^13.0.4",
+    "react-test-renderer": "^16.13.1",
     "tmp": "^0.2.1",
     "wait-on": "^5.2.0"
   },
@@ -77,6 +78,7 @@
   "jest": {
     "collectCoverageFrom": [
       "src/{db,services}/*js",
+      "src/react/App.js",
       "!**/node_modules/**",
       "!**/vendor/**"
     ]
