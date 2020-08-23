@@ -1,8 +1,8 @@
-const AddonManager = require('../electron/services/addon_manager.js');
-const fs = require('fs');
+import AddonManager from '../services/addon_manager.js';
+import fs from 'fs';
 const fsPromises = fs.promises;
-const tmp = require('tmp');
-const nock = require('nock');
+import tmp from 'tmp';
+import nock from 'nock';
 
 describe('Tests the functionality of the AddonManager class.', () => {
   describe('addonList()', () => {
@@ -58,7 +58,7 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const data = await aM.getAddonDataFromToc(fileName);
       const expected = {id: '3358'};
       expect(data).toEqual(expected);
-      //expect(data).to.not.have.property('version');
+      // expect(data).to.not.have.property('version');
 
       tmpobj.removeCallback();
       tmpDir.removeCallback();

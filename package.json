@@ -1,33 +1,32 @@
 {
-  "name": "addon-client",
+  "name": "react-new",
   "version": "0.1.0",
   "private": true,
+  "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
-    "@testing-library/dom": "^7.22.2",
-    "@testing-library/jest-dom": "^5.11.3",
-    "@testing-library/react": "^10.4.8",
-    "@testing-library/user-event": "^12.1.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
     "bootstrap": "^4.5.2",
-    "jquery": "^3.5.1",
+    "dexie": "^3.0.2",
+    "electron-is-dev": "^1.2.0",
     "n-readlines": "^1.0.0",
     "node-fetch": "^2.6.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.3.0",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3",
-    "sqlite3": "^5.0.0"
+    "react-scripts": "3.4.3"
   },
-  "homepage": "./",
-  "main": "public/electron.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --coverage",
+    "start": "rescripts start",
+    "build": "rescripts build",
+    "test": "rescripts test --coverage",
     "eject": "react-scripts eject",
-    "dev": "nf start",
-    "electron": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "react-scripts build && electron-builder --win -p always"
+    "electron-dev": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "electron-builder build -w"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -45,20 +44,41 @@
     ]
   },
   "devDependencies": {
-    "@types/jest": "^26.0.10",
-    "electron": "^9.2.0",
+    "@rescripts/cli": "^0.0.14",
+    "@rescripts/rescript-env": "^0.0.12",
+    "concurrently": "^5.3.0",
+    "electron": "^9.2.1",
     "electron-builder": "^22.8.0",
-    "electron-rebuild": "^1.11.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-react": "^7.20.6",
-    "foreman": "^3.0.1",
+    "fake-indexeddb": "^3.1.2",
     "nock": "^13.0.4",
-    "react-test-renderer": "^16.13.1",
-    "tmp": "^0.2.1"
+    "tmp": "^0.2.1",
+    "wait-on": "^5.2.0"
+  },
+  "author": {
+    "name": "Ossian Gustafsson",
+    "email": "ogustafsson1@gmail.com"
+  },
+  "build": {
+    "appId": "com.addonclient.client",
+    "productName": "Add0nClient",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/electron/services/*.js"
+      "src/{db,services}/*js",
+      "!**/node_modules/**",
+      "!**/vendor/**"
     ]
   }
 }

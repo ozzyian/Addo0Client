@@ -1,16 +1,8 @@
-.App {
-  background-color: black;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-#first {
-  background-color: red;
-}
-
-#mess {
-  color: white;
+.center {
+  position: absolute;
+  left: 20%;
+  margin-left: -50px;
+  top: 50%;
+  margin-top: -50px;
+  width: 70%;
 }

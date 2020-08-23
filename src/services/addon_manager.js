@@ -1,6 +1,6 @@
-const fs = require('fs');
-const fetch = require('node-fetch');
-const lineByLine = require('n-readlines');
+import fs from 'fs';
+import fetch from 'node-fetch';
+import lineByLine from 'n-readlines';
 /**
  * Handles the addons locally.
  */

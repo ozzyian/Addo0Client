@@ -1,35 +1,67 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import AddonList from './components/AddonList';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import DatabaseClient from '../db/db_client';
+import AddonTable from './components/AddonTable';
+import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-const ipc = window.require('electron').ipcRenderer;
 
+/**
+ *
+ */
 class App extends React.Component {
+  /**
+   *
+   * @param {*} props
+   */
   constructor(props) {
     super(props);
-    this.state = {reply: ''};
+    this.onChange = this.onChange.bind(this);
+    this.state = {initiated: false, path: ''};
+
+    this.db = new DatabaseClient('test');
   }
-  componentDidMount() {
-    ipc.on('asynReply', (event, data) => {
-      console.log('Message received');
-      this.setState({reply: data});
-    });
+
+  /**
+   *
+   * @param {*} e
+   */
+  onChange(e) {
+    if (e.target.files[0] === undefined) {
+      this.setState({path: ''});
+    } else {
+      const path = e.target.files[0].path;
+      this.setState({path: path, initiated: true});
+    }
   }
-  buttonClick = () => {
-    ipc.send('aSynMessage', 'A async message to main');
-  };
+  /**
+   *
+   * @param {*} e
+   */
+
+  /**
+   * @return {*}
+   */
   render() {
-    return (
-      <Container className="App" fluid>
-        <AddonList />
-        <Button variant="secondary" onClick={this.buttonClick}>
-          Skicka meddelande
-        </Button>
-        <h1 id="mess">Meddelande: {this.state.reply}</h1>
-      </Container>
-    );
+    if (this.state.initiated) {
+      return <AddonTable></AddonTable>;
+    } else {
+      return (
+        <div className="custom-file center">
+          <input
+            type="file"
+            className="custom-file-input"
+            id="customFile"
+            onChange={(e) => this.onChange(e)}
+          ></input>
+          <label
+            className="custom-file-label"
+            htmlFor="customFile"
+            overflow="false"
+          >
+            Choose Wow.exe or ClasicWoW.exe
+          </label>
+        </div>
+      );
+    }
   }
 }
 
