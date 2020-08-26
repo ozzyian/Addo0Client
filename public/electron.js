@@ -1,17 +1,22 @@
+/* eslint-disable require-jsdoc */
+/* eslint-disable max-len */
 const electron = require('electron');
 const app = electron.app;
+const ipc = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
+const AddonManager = require('../src/services/addon_manager');
 
 const path = require('path');
 const isDev = require('electron-is-dev');
 
+let aM;
 let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 680,
-    webPreferences: {nodeIntegration: true},
+    width: 1200,
+    height: 1000,
+    webPreferences: {nodeIntegration: true, webSecurity: false},
   });
   mainWindow.loadURL(
     isDev
@@ -20,7 +25,7 @@ function createWindow() {
   );
   if (isDev) {
     // Open the DevTools.
-    //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
+    // BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
     mainWindow.webContents.openDevTools();
   }
   mainWindow.on('closed', () => (mainWindow = null));
@@ -38,4 +43,21 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+ipc.on('init', async (event, args) => {
+  aM = new AddonManager(args);
+  const addonList = await aM.addonList();
+  const installedAddonData = addonList
+    .map((path) => aM.getAddonDataFromToc(path))
+    .filter((addonData) => !addonData.id.includes('N/A'));
+  const addons = await aM.getMultipleAddonData(
+    installedAddonData.map((addon) => addon.id),
+  );
+  mainWindow.webContents.send('init', addons);
+});
+
+ipc.on('update', async (event, args) => {
+  await aM.downloadFromUrl(args);
+  event.sender.send('update' + args.id, 'args');
 });
