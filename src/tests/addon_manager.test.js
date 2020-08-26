@@ -23,9 +23,9 @@ describe('Tests the functionality of the AddonManager class.', () => {
   });
   describe('addonList()', () => {
     it('Returns array with all addons.', async () => {
-      const tmpAddonDir = tmp.dirSync({dir: tmpDirAddons.name});
+      tmp.dirSync({name: 'tempAddonDir', dir: tmpDirAddons.name});
       const aM = new AddonManager(tmpDirWow.name);
-      const expected = [tmpAddonDir.name.split('\\').pop()];
+      const expected = ['tempAddonDir'];
       const actual = await aM.addonList();
       expect(actual).toEqual(
         expected,
