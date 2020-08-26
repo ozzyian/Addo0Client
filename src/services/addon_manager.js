@@ -71,10 +71,11 @@ class AddonManager {
    * @param {*} addon
    * @return {*}
    */
-  extractDownloadUrl(addon) {
-    return addon.latestFiles.find(
+  extractDownloadData(addon) {
+    const latestFile = addon.latestFiles.find(
       (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
-    ).downloadUrl;
+    );
+    return {url: latestFile.downloadUrl, fileName: latestFile.fileName};
   }
 
   /**
@@ -82,11 +83,9 @@ class AddonManager {
    * @param {*} addonData
    */
   async downloadFromUrl(addonData) {
-    const newAddon = await fetch(this.extractDownloadUrl(addonData));
-    console.log(newAddon);
-    const fileStream = fs.createWriteStream(
-      this.wowPath + '/' + fileData.fileName,
-    );
+    const data = this.extractDownloadData(addonData);
+    const newAddon = await fetch(data.url);
+    const fileStream = fs.createWriteStream(this.wowPath + '/' + data.fileName);
     return new Promise((resolve, reject) => {
       newAddon.body.pipe(fileStream);
       newAddon.body.on('error', (err) => {

@@ -137,15 +137,17 @@ describe('Tests the functionality of the AddonManager class.', () => {
       expect(actual).toEqual([response]);
     });
   });
-  describe('extractDownloadUrl()', () => {
+  describe('extractDownloadData()', () => {
     it('', () => {
       const aM = new AddonManager(__dirname);
       const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
       const addonData = JSON.parse(rawdata);
-      const actual = aM.extractDownloadUrl(addonData);
-      expect(actual).toEqual(
-        'https://edge.forgecdn.net/files/3036/101/DBM-Core-1.13.57-classic.zip',
-      );
+      const actual = aM.extractDownloadData(addonData);
+      expect(actual).toEqual({
+        url:
+          'https://edge.forgecdn.net/files/3036/101/DBM-Core-1.13.57-classic.zip',
+        fileName: 'DBM-Core-1.13.57-classic.zip',
+      });
     });
   });
 });
