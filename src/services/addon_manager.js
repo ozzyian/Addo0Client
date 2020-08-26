@@ -1,43 +1,56 @@
-import fs from 'fs';
-import fetch from 'node-fetch';
-import lineByLine from 'n-readlines';
+/* eslint-disable no-var */
+const fs = require('fs');
+const fsPromise = fs.promises;
+// import eFetch from 'electron-fetch';
+const fetch = require('node-fetch');
+const lineByLine = require('n-readlines');
 /**
  * Handles the addons locally.
  */
-module.exports = class AddonManager {
+class AddonManager {
   /**
    *
    * @param {*} wowPath the path to the folder with add0ns.
    */
   constructor(wowPath) {
-    this.wowPath = wowPath;
+    this.wowPath = wowPath + '/Interface/AddOns';
+    this.gameVersionFlavor = 'wow_classic';
   }
   /**
    * Returns an array with names of the current addons.
    * @return {Promise} with all the dirs and failes inside a folder.
    */
-  addonList() {
-    return new Promise((resolve, reject) => {
-      fs.readdir(this.wowPath, (err, files) => {
-        err
-          ? reject(new Error('Folder does not contain any elements...'))
-          : resolve(files);
+  async addonList() {
+    try {
+      const addonList = await fsPromise.readdir(this.wowPath);
+      return addonList.filter((dir) => {
+        return fs.lstatSync(this.wowPath + '/' + dir).isDirectory();
       });
-    });
+    } catch (e) {
+      console.log(e);
+    }
   }
+
+  /**
+   * @return {*}
+   */
+
   /**
    *
-   * @param {String} tocFile path to the toc file
+   * @param {String} addonPath path to the toc file
    * @return {Promise} promise with error or object with id and/or version.
    */
-  async getAddonDataFromToc(tocFile) {
+  getAddonDataFromToc(addonPath) {
+    const addon = addonPath.split('\\').pop();
     let line;
     let idFound = false;
     const data = {};
 
     // not my fault the library won't adhear to common coding practises
     // eslint-disable-next-line new-cap
-    const liner = new lineByLine(this.wowPath + '/' + tocFile);
+    const liner = new lineByLine(
+      this.wowPath + '/' + addon + '/' + addon + '.toc',
+    );
     while ((line = liner.next())) {
       if (line.includes('Curse-Project-ID:')) {
         data['id'] = line.toString('utf-8').replace(/[^\d.]/g, '');
@@ -46,21 +59,37 @@ module.exports = class AddonManager {
       if (line.includes('Version:')) {
         data['version'] = line.toString('utf-8').replace(/[^\d.]/g, '');
       }
-
-      if (line.includes('RequiredDeps:')) {
-        data['requiredDeps'] = line
-          .toString('utf-8')
-          .replace('## RequiredDeps:', '')
-          .trim()
-          .split(' ');
-      }
     }
 
     if (idFound) {
       return data;
     }
 
-    throw new Error('Could not find an ID');
+    return {id: 'N/A'};
+  }
+
+  /**
+   *
+   * @param {*} addonData
+   */
+  async downloadFromUrl(addonData) {
+    const fileData = addonData.latestFiles.find(
+      (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
+    );
+    const newAddon = await fetch(fileData.downloadUrl);
+
+    const fileStream = fs.createWriteStream(
+      this.wowPath + '/' + fileData.fileName,
+    );
+    return new Promise((resolve, reject) => {
+      newAddon.body.pipe(fileStream);
+      newAddon.body.on('error', (err) => {
+        reject(err);
+      });
+      fileStream.on('finish', function () {
+        resolve();
+      });
+    });
   }
 
   /**
@@ -68,14 +97,27 @@ module.exports = class AddonManager {
    * @param {String} addonId
    * @return {Promise} returns a promise that may contain an error or addon data
    */
-  async getAddonData(addonId) {
-    try {
-      const response = await fetch(
-        `https://addons-ecs.forgesvc.net/api/v2/addon/${addonId}`,
-      );
-      return response.json();
-    } catch (err) {
-      return err;
-    }
+  getAddonData(addonId) {
+    return fetch(`https://addons-ecs.forgesvc.net/api/v2/addon/${addonId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => response.json());
   }
-};
+  /**
+   *
+   * @param {*} addonIds
+   * @return {*}
+   */
+  getMultipleAddonData(addonIds) {
+    return fetch(`https://addons-ecs.forgesvc.net/api/v2/addon`, {
+      method: 'POST',
+      body: JSON.stringify(addonIds),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => response.json());
+  }
+}
+
+module.exports = AddonManager;
