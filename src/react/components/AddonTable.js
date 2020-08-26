@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import AddonListItem from './AddonListItem';
 import Spinner from 'react-bootstrap/Spinner';
 import DatabaseClient from '../../db/db_client';
-const ipc = require('electron').ipcRenderer;
+import {ipcRenderer} from 'electron';
 
 /**
  *
@@ -27,7 +27,7 @@ class AddonTable extends React.Component {
    *
    */
   async componentDidMount() {
-    ipc.on('init', (_, addons) => {
+    ipcRenderer.on('init', (_, addons) => {
       console.log('got data');
       this.setState({
         loading: false,
@@ -38,7 +38,7 @@ class AddonTable extends React.Component {
     const storedAddons = await this.db.getAll();
 
     if (storedAddons.length === 0) {
-      ipc.send('init', this.props.path);
+      ipcRenderer.send('init', this.props.path);
     } else {
       this.setState({addons: storedAddons, loading: false});
     }
