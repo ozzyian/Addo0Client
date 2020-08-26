@@ -1,7 +1,5 @@
-/* eslint-disable no-var */
 const fs = require('fs');
 const fsPromise = fs.promises;
-// import eFetch from 'electron-fetch';
 const fetch = require('node-fetch');
 const lineByLine = require('n-readlines');
 /**
@@ -27,7 +25,7 @@ class AddonManager {
         return fs.lstatSync(this.wowPath + '/' + dir).isDirectory();
       });
     } catch (e) {
-      console.log(e);
+      throw new Error('');
     }
   }
 
@@ -37,11 +35,11 @@ class AddonManager {
 
   /**
    *
-   * @param {String} addonPath path to the toc file
+   * @param {String} addon name of the addon
    * @return {Promise} promise with error or object with id and/or version.
    */
-  getAddonDataFromToc(addonPath) {
-    const addon = addonPath.split('\\').pop();
+  getAddonDataFromToc(addon) {
+    // const addon = addonPath.split('\\').pop();
     let line;
     let idFound = false;
     const data = {};
@@ -70,14 +68,22 @@ class AddonManager {
 
   /**
    *
+   * @param {*} addon
+   * @return {*}
+   */
+  extractDownloadUrl(addon) {
+    return addon.latestFiles.find(
+      (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
+    ).downloadUrl;
+  }
+
+  /**
+   *
    * @param {*} addonData
    */
   async downloadFromUrl(addonData) {
-    const fileData = addonData.latestFiles.find(
-      (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
-    );
-    const newAddon = await fetch(fileData.downloadUrl);
-
+    const newAddon = await fetch(this.extractDownloadUrl(addonData));
+    console.log(newAddon);
     const fileStream = fs.createWriteStream(
       this.wowPath + '/' + fileData.fileName,
     );

@@ -18,6 +18,12 @@ describe('Tests the functionality of the database', () => {
       expect(res).toEqual({id: 1, data: ''});
     });
   });
+  describe('getAll()', () => {
+    it('returns all row as an array', async () => {
+      const res = await db.getAll();
+      expect(res).toEqual([{id: 1, data: ''}]);
+    });
+  });
   describe('deleteData()', () => {
     it('delets a row from the database', async () => {
       const res = await db.deleteData(1);

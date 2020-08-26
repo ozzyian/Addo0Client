@@ -77,8 +77,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/{db,services}/*js",
-      "src/react/App.js",
+      "src/{db,services}/*.js",
       "!**/node_modules/**",
       "!**/vendor/**"
     ]
