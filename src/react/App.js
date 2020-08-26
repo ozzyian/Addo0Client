@@ -1,5 +1,4 @@
 import React from 'react';
-import DatabaseClient from '../db/db_client';
 import AddonTable from './components/AddonTable';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
@@ -16,8 +15,6 @@ class App extends React.Component {
     super(props);
     this.onChange = this.onChange.bind(this);
     this.state = {initiated: false, path: ''};
-
-    this.db = new DatabaseClient('test');
   }
 
   /**
@@ -28,8 +25,9 @@ class App extends React.Component {
     if (e.target.files[0] === undefined) {
       this.setState({path: ''});
     } else {
-      const path = e.target.files[0].path;
-      this.setState({path: path, initiated: true});
+      const path = e.target.files[0].path.split('\\');
+      path.pop();
+      this.setState({path: path.join('/'), initiated: true});
     }
   }
   /**
@@ -42,7 +40,7 @@ class App extends React.Component {
    */
   render() {
     if (this.state.initiated) {
-      return <AddonTable></AddonTable>;
+      return <AddonTable path={this.state.path}></AddonTable>;
     } else {
       return (
         <div className="custom-file center">
