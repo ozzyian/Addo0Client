@@ -34,6 +34,13 @@ class DatabaseClient {
   }
 
   /**
+   * @return {Promise};
+   */
+  getAll() {
+    return this.db.addons.toArray();
+  }
+
+  /**
    *
    * @param {*} addonId
    * @return {*}
