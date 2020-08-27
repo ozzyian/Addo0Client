@@ -12,6 +12,8 @@ class AddonListItem extends React.Component {
   constructor(props) {
     super(props);
     this.updateAddon = this.updateAddon.bind(this);
+    this.updateProgress = this.updateProgress.bind(this);
+    this.db = this.props.db;
     this.addon = this.props.addon;
     this.state = {
       updating: false,
@@ -19,17 +21,31 @@ class AddonListItem extends React.Component {
       updateProgress: 0,
     };
   }
-
+  /**
+   *
+   * @param {*} prevState
+   */
   /**
    *
    */
   componentDidMount() {
-    ipc.on('update' + this.addon.id, () => {
-      this.setState({
-        updateAvailable: false,
-        updating: false,
-        updateProgress: 0,
-      });
+    ipc.on('downloaded' + this.addon.id, () => {
+      this.updateProgress(99);
+    });
+
+    ipc.on('updated' + this.addon.id, async () => {
+      await this.db.insertData(this.addon);
+      this.setState({updating: false, updateAvailable: false});
+    });
+  }
+
+  /**
+   *
+   * @param {Integer} status
+   */
+  async updateProgress(status) {
+    this.setState({
+      updateProgress: status,
     });
   }
 
@@ -38,7 +54,7 @@ class AddonListItem extends React.Component {
    */
   updateAddon() {
     ipc.send('update', this.addon);
-    this.setState({updating: true, updateAvailable: false, updateProgress: 25});
+    this.setState({updating: true, updateAvailable: false});
   }
   /**
    * @return {*}
@@ -57,7 +73,6 @@ class AddonListItem extends React.Component {
         </tr>
       );
     } else if (this.state.updating) {
-      console.log('updating');
       return (
         <tr>
           <td>{this.props.addon.id}</td>

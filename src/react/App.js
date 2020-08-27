@@ -2,6 +2,7 @@ import React from 'react';
 import AddonTable from './components/AddonTable';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
+import DatabaseClient from '../db/db_client';
 
 /**
  *
@@ -13,6 +14,7 @@ class App extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.db = new DatabaseClient('asds');
     this.onChange = this.onChange.bind(this);
     this.state = {initiated: false, path: ''};
   }
@@ -40,7 +42,7 @@ class App extends React.Component {
    */
   render() {
     if (this.state.initiated) {
-      return <AddonTable path={this.state.path}></AddonTable>;
+      return <AddonTable db={this.db} path={this.state.path}></AddonTable>;
     } else {
       return (
         <div className="custom-file center">
@@ -55,7 +57,7 @@ class App extends React.Component {
             htmlFor="customFile"
             overflow="false"
           >
-            Choose Wow.exe or ClasicWoW.exe
+            Choose Wow.exe or ClassicWoW.exe
           </label>
         </div>
       );

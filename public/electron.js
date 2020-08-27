@@ -57,7 +57,11 @@ ipc.on('init', async (event, args) => {
   mainWindow.webContents.send('init', addons);
 });
 
-ipc.on('update', async (event, args) => {
-  await aM.downloadFromUrl(args);
-  event.sender.send('update' + args.id, 'args');
+ipc.on('update', async (event, addon) => {
+  const fileName = await aM.downloadFromUrl(addon);
+  event.sender.send('downloaded' + addon.id);
+  await aM.extractAddonFiles(fileName);
+  event.sender.send('extracted' + addon.id);
+  aM.deleteAddonZip(fileName);
+  event.sender.send('updated' + addon.id);
 });

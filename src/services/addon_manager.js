@@ -1,6 +1,7 @@
 const fs = require('fs');
 const fsPromise = fs.promises;
 const fetch = require('node-fetch');
+const extract = require('extract-zip');
 const lineByLine = require('n-readlines');
 /**
  * Handles the addons locally.
@@ -25,7 +26,7 @@ class AddonManager {
         return fs.lstatSync(this.wowPath + '/' + dir).isDirectory();
       });
     } catch (e) {
-      throw new Error('');
+      throw new Error('Could not retreive addon folders.');
     }
   }
 
@@ -36,10 +37,9 @@ class AddonManager {
   /**
    *
    * @param {String} addon name of the addon
-   * @return {Promise} promise with error or object with id and/or version.
+   * @return {Object} promise with error or object with id and/or version.
    */
   getAddonDataFromToc(addon) {
-    // const addon = addonPath.split('\\').pop();
     let line;
     let idFound = false;
     const data = {};
@@ -68,14 +68,21 @@ class AddonManager {
 
   /**
    *
-   * @param {*} addon
-   * @return {*}
+   * @param {Object} addonData object that contains the data to be extracted
+   * @return {Object}
    */
-  extractDownloadData(addon) {
-    const latestFile = addon.latestFiles.find(
+  extractDownloadData(addonData) {
+    const gameVersionLatestFileData = addonData.gameVersionLatestFiles.find(
       (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
     );
-    return {url: latestFile.downloadUrl, fileName: latestFile.fileName};
+    const latestFileData = addonData.latestFiles.find(
+      (fileData) =>
+        fileData.fileName === gameVersionLatestFileData.projectFileName,
+    );
+    return {
+      url: latestFileData.downloadUrl,
+      fileName: latestFileData.fileName,
+    };
   }
 
   /**
@@ -91,12 +98,37 @@ class AddonManager {
       newAddon.body.on('error', (err) => {
         reject(err);
       });
-      fileStream.on('finish', function () {
-        resolve();
+      fileStream.on('finish', () => {
+        resolve(this.wowPath + '/' + data.fileName);
       });
     });
   }
 
+  /**
+   *
+   * @param {*} pathToZip path to the zipfile
+   */
+  async extractAddonFiles(pathToZip) {
+    try {
+      await extract(pathToZip, {dir: this.wowPath});
+    } catch (err) {
+      throw err;
+    }
+    return true;
+  }
+
+  /**
+   *
+   * @param {String} zipPath path to the zipfile to be deleted
+   *
+   */
+  async deleteAddonZip(zipPath) {
+    try {
+      await fsPromise.unlink(zipPath);
+    } catch (e) {
+      throw e;
+    }
+  }
   /**
    *
    * @param {String} addonId

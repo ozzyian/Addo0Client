@@ -11,6 +11,7 @@
     "bootstrap": "^4.5.2",
     "dexie": "^3.0.2",
     "electron-is-dev": "^1.2.0",
+    "extract-zip": "^2.0.1",
     "n-readlines": "^1.0.0",
     "node-fetch": "^2.6.0",
     "react": "^16.13.1",

@@ -8,7 +8,9 @@ describe('Tests the functionality of the AddonManager class.', () => {
   let tmpDirInterface;
   let tmpDirAddons;
   afterAll(() => {
-    tmp.setGracefulCleanup();
+    tmpDirAddons.removeCallback();
+    tmpDirInterface.removeCallback();
+    tmpDirAddons.removeCallback();
   });
   beforeAll(() => {
     tmpDirWow = tmp.dirSync();
@@ -23,7 +25,10 @@ describe('Tests the functionality of the AddonManager class.', () => {
   });
   describe('addonList()', () => {
     it('Returns array with all addons.', async () => {
-      tmp.dirSync({name: 'tempAddonDir', dir: tmpDirAddons.name});
+      const tempDir = tmp.dirSync({
+        name: 'tempAddonDir',
+        dir: tmpDirAddons.name,
+      });
       const aM = new AddonManager(tmpDirWow.name);
       const expected = ['tempAddonDir'];
       const actual = await aM.addonList();
@@ -31,6 +36,7 @@ describe('Tests the functionality of the AddonManager class.', () => {
         expected,
         'actual and expected have equal first element',
       );
+      tempDir.removeCallback();
     });
     it('Returns an error when dir is not an actual directory', async () => {
       const aM = new AddonManager('NON EXISTING DIR');
@@ -49,6 +55,8 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const data = await aM.getAddonDataFromToc('tempToc');
       const expected = {id: '3358', version: '1.13.55'};
       expect(data).toEqual(expected);
+      tmpobj.removeCallback();
+      tmpDir.removeCallback();
     });
 
     it('Returns the id of a given file', async () => {
@@ -67,6 +75,9 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const data = await aM.getAddonDataFromToc('tempTocNoVersion');
       const expected = {id: '3358'};
       expect(data).toEqual(expected);
+
+      tmpobj.removeCallback();
+      tmpDir.removeCallback();
     });
 
     it('Returns the version of a given file', async () => {
@@ -84,6 +95,9 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const data = await aM.getAddonDataFromToc('tempTocID');
       const expected = {id: '3358'};
       expect(data).toEqual(expected);
+
+      tmpobj.removeCallback();
+      tmpDir.removeCallback();
     });
 
     it('Returns N/A since theres no ID inside the file', async () => {
@@ -100,6 +114,9 @@ describe('Tests the functionality of the AddonManager class.', () => {
 
       const aM = new AddonManager(tmpDirWow.name);
       expect(aM.getAddonDataFromToc('tempTocNada')).toEqual({id: 'N/A'});
+
+      tmpobj.removeCallback();
+      tmpDir.removeCallback();
     });
   });
   describe('getAddonInfo()', () => {
@@ -138,16 +155,33 @@ describe('Tests the functionality of the AddonManager class.', () => {
     });
   });
   describe('extractDownloadData()', () => {
-    it('', () => {
+    it('Returns an object with the url and filename as properties', () => {
       const aM = new AddonManager(__dirname);
       const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
       const addonData = JSON.parse(rawdata);
       const actual = aM.extractDownloadData(addonData);
       expect(actual).toEqual({
         url:
-          'https://edge.forgecdn.net/files/3036/101/DBM-Core-1.13.57-classic.zip',
-        fileName: 'DBM-Core-1.13.57-classic.zip',
+          'https://edge.forgecdn.net/files/3043/88/DBM-Core-1.13.57-54-gf85328d-classic.zip',
+        fileName: 'DBM-Core-1.13.57-54-gf85328d-classic.zip',
       });
+    });
+  });
+
+  describe('deleteAddonZip()', () => {
+    it('deletes the zip folder', async () => {
+      const zip = tmp.fileSync({
+        name: 'tempFile',
+        dir: tmpDirAddons.name,
+      });
+      const aM = new AddonManager(tmpDirWow.name);
+      await aM.deleteAddonZip(zip.name);
+      const actual = fs.existsSync(zip.name);
+      expect(actual).toBe(false);
+    });
+    it('Throw an error when file does not exist', async () => {
+      const aM = new AddonManager(__dirname);
+      await expect(aM.deleteAddonZip('non existing file')).rejects.toThrow();
     });
   });
 });
