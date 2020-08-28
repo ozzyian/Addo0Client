@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot tests renders correctly 1`] = `
+<Spinner
+  animation="border"
+  className="center-spinner"
+  role="status"
+/>
+`;
