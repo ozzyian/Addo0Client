@@ -3,7 +3,6 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const DatabaseClient = require('../src/db/database_client');
 const AddonManager = require('../src/services/addon_manager');
-const {download} = require('electron-dl');
 
 /**
  *
