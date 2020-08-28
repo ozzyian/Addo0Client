@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot tests renders correctly 1`] = `
+<tr>
+  <td>
+    3358
+  </td>
+  <td>
+    Deadly Boss Mods (DBM)
+  </td>
+  <td>
+    <button
+      onClick={[Function]}
+    >
+      Update
+    </button>
+  </td>
+  <td>
+    DBM-Core-1.13.57-54-gf85328d-classic.zip
+  </td>
+  <td>
+    MysticalOS
+  </td>
+</tr>
+`;
+
+exports[`Snapshot tests renders correctly when addon is updated 1`] = `
+<tr>
+  <td>
+    3358
+  </td>
+  <td>
+    Deadly Boss Mods (DBM)
+  </td>
+  <td>
+    Updated
+  </td>
+  <td>
+    DBM-Core-1.13.57-54-gf85328d-classic.zip
+  </td>
+  <td>
+    MysticalOS
+  </td>
+</tr>
+`;
+
+exports[`Snapshot tests renders correctly when updating 1`] = `
+<tr>
+  <td>
+    3358
+  </td>
+  <td>
+    Deadly Boss Mods (DBM)
+  </td>
+  <td>
+    <Spinner
+      animation="border"
+      role="status"
+    />
+  </td>
+  <td>
+    DBM-Core-1.13.57-54-gf85328d-classic.zip
+  </td>
+  <td>
+    MysticalOS
+  </td>
+</tr>
+`;

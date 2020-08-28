@@ -1,5 +1,5 @@
 import React from 'react';
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import Spinner from 'react-bootstrap/Spinner';
 const ipc = require('electron').ipcRenderer;
 /**
  *
@@ -12,13 +12,10 @@ class AddonListItem extends React.Component {
   constructor(props) {
     super(props);
     this.updateAddon = this.updateAddon.bind(this);
-    this.updateProgress = this.updateProgress.bind(this);
-    this.db = this.props.db;
     this.addon = this.props.addon;
     this.state = {
       updating: false,
       updateAvailable: true,
-      updateProgress: 0,
     };
   }
   /**
@@ -28,33 +25,16 @@ class AddonListItem extends React.Component {
   /**
    *
    */
-  componentDidMount() {
-    ipc.on('downloaded' + this.addon.id, () => {
-      this.updateProgress(99);
-    });
-
-    ipc.on('updated' + this.addon.id, async () => {
-      await this.db.insertData(this.addon);
-      this.setState({updating: false, updateAvailable: false});
-    });
-  }
-
-  /**
-   *
-   * @param {Integer} status
-   */
-  async updateProgress(status) {
-    this.setState({
-      updateProgress: status,
-    });
-  }
+  componentDidMount() {}
 
   /**
    *
    */
-  updateAddon() {
-    ipc.send('update', this.addon);
+  async updateAddon() {
+    const complete = ipc.invoke('update', this.addon);
     this.setState({updating: true, updateAvailable: false});
+    const result = await complete;
+    this.setState({updating: !result, updateAvailable: false});
   }
   /**
    * @return {*}
@@ -78,7 +58,7 @@ class AddonListItem extends React.Component {
           <td>{this.props.addon.id}</td>
           <td>{this.props.addon.name}</td>
           <td>
-            <ProgressBar animated now={this.state.updateProgress} />
+            <Spinner animation="border" role="status"></Spinner>
           </td>
           <td>{this.props.addon.gameVersionLatestFiles[0].projectFileName}</td>
           <td>{this.props.addon.authors[0].name}</td>

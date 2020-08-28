@@ -112,7 +112,7 @@ class AddonManager {
     try {
       await extract(pathToZip, {dir: this.wowPath});
     } catch (err) {
-      throw err;
+      return err;
     }
     return true;
   }
@@ -120,13 +120,14 @@ class AddonManager {
   /**
    *
    * @param {String} zipPath path to the zipfile to be deleted
-   *
+   * @return {*}
    */
   async deleteAddonZip(zipPath) {
-    try {
+    if (fs.existsSync(zipPath)) {
       await fsPromise.unlink(zipPath);
-    } catch (e) {
-      throw e;
+      return true;
+    } else {
+      return false;
     }
   }
   /**

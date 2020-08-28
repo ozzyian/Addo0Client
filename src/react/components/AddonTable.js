@@ -5,7 +5,6 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import AddonListItem from './AddonListItem';
 import Spinner from 'react-bootstrap/Spinner';
-const ipc = require('electron').ipcRenderer;
 
 /**
  *
@@ -17,37 +16,20 @@ class AddonTable extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.db = this.props.db;
-    this.state = {path: this.props.path, loading: true, addons: []};
+    this.state = {loading: !this.props.initiated, addons: this.props.addons};
     this.showAddons = this.showAddons.bind(this);
   }
 
   /**
    *
    */
-  async componentDidMount() {
-    ipc.on('init', (event, addons) => {
-      console.log('got data');
-      this.setState({
-        loading: false,
-        addons: addons,
-      });
-    });
-
-    const storedAddons = await this.db.getAll();
-
-    //if (storedAddons.length === 0) {
-    ipc.send('init', this.props.path);
-    //} else {
-    //this.setState({addons: storedAddons, loading: false});
-    //}
-  }
+  componentDidMount() {}
   /**
    * @return {*}
    */
   showAddons() {
     return this.state.addons.map((addon) => {
-      return <AddonListItem db={this.db} key={addon.id} addon={addon} />;
+      return <AddonListItem key={addon.id} addon={addon} />;
     });
   }
 
