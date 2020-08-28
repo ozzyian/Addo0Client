@@ -89,6 +89,19 @@ module.exports = class DatabaseClient {
   }
 
   /**
+   *
+   * @param {*} addon
+   * @return {Promise}
+   */
+  updateAddonData(addon) {
+    const data = JSON.stringify(addon);
+    return this.dao.run(`UPDATE addons SET data = ? WHERE id = ?`, [
+      data,
+      addon.id,
+    ]);
+  }
+
+  /**
    * Deletes the addons table with all stored data
    * @return {Promise}
    */
