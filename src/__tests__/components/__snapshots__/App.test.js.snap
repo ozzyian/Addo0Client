@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot tests it renders correctly 1`] = `
+<div
+  className="custom-file center"
+>
+  <input
+    className="custom-file-input"
+    id="customFile"
+    onChange={[Function]}
+    type="file"
+  />
+  <label
+    className="custom-file-label"
+    htmlFor="customFile"
+    overflow="false"
+  >
+    Choose Wow.exe or ClassicWoW.exe
+  </label>
+</div>
+`;
+
+exports[`Snapshot tests renders correctly when file path is choosen 1`] = `
+<AddonTable
+  addons={Array []}
+  initiated={true}
+/>
+`;

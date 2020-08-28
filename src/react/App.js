@@ -1,8 +1,8 @@
 import React from 'react';
-import DatabaseClient from '../db/db_client';
 import AddonTable from './components/AddonTable';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
+const ipc = require('electron').ipcRenderer;
 
 /**
  *
@@ -15,22 +15,29 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
-    this.state = {initiated: false, path: ''};
-
-    this.db = new DatabaseClient('test');
+    this.state = {initiated: false, addons: []};
   }
 
   /**
    *
-   * @param {*} e
    */
-  onChange(e) {
-    if (e.target.files[0] === undefined) {
-      this.setState({path: ''});
+  async componentDidMount() {
+    const res = await ipc.invoke('app-load');
+    if (!res) {
+      return;
     } else {
-      const path = e.target.files[0].path;
-      this.setState({path: path, initiated: true});
+      this.setState({initiated: true, addons: res});
     }
+  }
+  /**
+   *
+   * @param {Object} event
+   */
+  async onChange(event) {
+    const path = event.target.files[0].path.split('\\');
+    path.pop();
+    const addons = await ipc.invoke('init-with-path', path.join('/'));
+    this.setState({initiated: true, addons: addons});
   }
   /**
    *
@@ -42,7 +49,12 @@ class App extends React.Component {
    */
   render() {
     if (this.state.initiated) {
-      return <AddonTable></AddonTable>;
+      return (
+        <AddonTable
+          initiated={this.state.initiated}
+          addons={this.state.addons}
+        ></AddonTable>
+      );
     } else {
       return (
         <div className="custom-file center">
@@ -57,7 +69,7 @@ class App extends React.Component {
             htmlFor="customFile"
             overflow="false"
           >
-            Choose Wow.exe or ClasicWoW.exe
+            Choose Wow.exe or ClassicWoW.exe
           </label>
         </div>
       );

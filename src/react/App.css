@@ -6,3 +6,15 @@
   margin-top: -50px;
   width: 70%;
 }
+
+.center-spinner {
+  position: absolute;
+  left: 50%;
+  margin-left: -50px;
+  top: 50%;
+  margin-top: -50px;
+}
+
+#container {
+  margin-top: 2em;
+}
