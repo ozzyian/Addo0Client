@@ -52,7 +52,9 @@ class Main {
 
       const deleted = await this.aM.deleteAddonZip(filePath);
 
-      await this.db.updateAddonData(addon);
+      if (extracted && deleted) {
+        await this.db.updateAddonData(addon);
+      }
 
       return extracted && deleted;
     });
