@@ -48,6 +48,17 @@ describe('Tests to validate the DatabaseClient class', () => {
       await expect(db.getAll()).rejects.toThrow();
     });
   });
+
+  describe('updateAddonData()', () => {
+    it('updates the specific row ', async () => {
+      await db.addAddonData(tempAddonData);
+      tempAddonData.name = 'DBM';
+      const res = await db.updateAddonData(tempAddonData);
+      expect(res).toEqual({lastID: 3358, changes: 1});
+      const actual = await db.getAddonData(tempAddonData.id);
+      expect(JSON.parse(actual.data)).toEqual(tempAddonData);
+    });
+  });
   describe('deleteAddonData()', () => {
     it('Should successfully delete an entry in the database', async () => {
       const res = await db.deleteAddonData(tempAddonData.id);
