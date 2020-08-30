@@ -45,21 +45,6 @@ describe('Tests the functionality of the AddonManager class.', () => {
     });
   });
   describe('getAddonDataFromToc()', () => {
-    it('Returns the data of a given file (id and version)', async () => {
-      const tmpDir = tmp.dirSync({dir: tmpDirAddons.name, name: 'tempToc'});
-      const tmpobj = tmp.fileSync({dir: tmpDir.name, name: 'tempToc.toc'});
-      fs.writeFileSync(
-        tmpobj.name,
-        '## X-Curse-Project-ID: 3358\n## Version: 1.13.55',
-      );
-      const aM = new AddonManager(tmpDirWow.name);
-      const data = await aM.getAddonDataFromToc('tempToc');
-      const expected = {id: '3358', version: '1.13.55'};
-      expect(data).toEqual(expected);
-      tmpobj.removeCallback();
-      tmpDir.removeCallback();
-    });
-
     it('Returns the id of a given file', async () => {
       const tmpDir = tmp.dirSync({
         dir: tmpDirAddons.name,
@@ -166,6 +151,30 @@ describe('Tests the functionality of the AddonManager class.', () => {
           'https://edge.forgecdn.net/files/3043/88/DBM-Core-1.13.57-54-gf85328d-classic.zip',
         fileName: 'DBM-Core-1.13.57-54-gf85328d-classic.zip',
       });
+    });
+  });
+
+  describe('', () => {
+    it('extractLatestFileData()', () => {
+      const aM = new AddonManager(__dirname);
+      const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
+      const addonData = JSON.parse(rawdata);
+      const expected = addonData.latestFiles[4];
+      const actual = aM.extractLatestFileData(addonData);
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('checkForUpdate', () => {
+    it('Returns true if update is available', () => {
+      const aM = new AddonManager(__dirname);
+      const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
+      const newVersion = JSON.parse(rawdata);
+      const currentVersion = JSON.parse(rawdata);
+
+      const newDate = new Date('2020-08-26T23:07:17.033Z');
+      aM.extractLatestFileData(newVersion).fileDate = newDate;
+      expect(aM.checkForUpdate(currentVersion, newVersion)).toBe(true);
     });
   });
 

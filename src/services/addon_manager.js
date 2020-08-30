@@ -54,9 +54,6 @@ class AddonManager {
         data['id'] = line.toString('utf-8').replace(/[^\d.]/g, '');
         idFound = true;
       }
-      if (line.includes('Version:')) {
-        data['version'] = line.toString('utf-8').replace(/[^\d.]/g, '');
-      }
     }
 
     if (idFound) {
@@ -83,6 +80,23 @@ class AddonManager {
       url: latestFileData.downloadUrl,
       fileName: latestFileData.fileName,
     };
+  }
+
+  /**
+   *
+   * @param {Object} addonData
+   * @return {Object}
+   */
+  extractLatestFileData(addonData) {
+    const gameVersionLatestFileData = addonData.gameVersionLatestFiles.find(
+      (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
+    );
+    const latestFileData = addonData.latestFiles.find(
+      (fileData) =>
+        fileData.fileName === gameVersionLatestFileData.projectFileName,
+    );
+
+    return latestFileData;
   }
 
   /**
@@ -155,6 +169,23 @@ class AddonManager {
         'Content-Type': 'application/json',
       },
     }).then((response) => response.json());
+  }
+
+  /**
+   * Returns true if there is a new version available.
+   * @param {Object} currentAddonData
+   * @param {Object} remoteAddonData
+   * @return {Boolean}
+   */
+  checkForUpdate(currentAddonData, remoteAddonData) {
+    const currentFileDate = new Date(
+      this.extractLatestFileData(currentAddonData).fileDate,
+    );
+    const remoteFileDate = new Date(
+      this.extractLatestFileData(remoteAddonData).fileDate,
+    );
+
+    return currentFileDate < remoteFileDate;
   }
 }
 
