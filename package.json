@@ -51,7 +51,7 @@
     "electron": "^10.1.0",
     "electron-builder": "^22.8.0",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.3",
+    "enzyme-adapter-react-16": "^1.15.4",
     "enzyme-to-json": "^3.5.0",
     "eslint-config-google": "^0.14.0",
     "fake-indexeddb": "^3.1.2",
