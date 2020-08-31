@@ -15,9 +15,7 @@ exports[`Snapshot tests renders correctly 1`] = `
       Update
     </button>
   </td>
-  <td>
-    DBM-Core-1.13.57-54-gf85328d-classic.zip
-  </td>
+  <td />
   <td>
     MysticalOS
   </td>
@@ -35,9 +33,7 @@ exports[`Snapshot tests renders correctly when addon is updated 1`] = `
   <td>
     Updated
   </td>
-  <td>
-    DBM-Core-1.13.57-54-gf85328d-classic.zip
-  </td>
+  <td />
   <td>
     MysticalOS
   </td>
@@ -58,9 +54,7 @@ exports[`Snapshot tests renders correctly when updating 1`] = `
       role="status"
     />
   </td>
-  <td>
-    DBM-Core-1.13.57-54-gf85328d-classic.zip
-  </td>
+  <td />
   <td>
     MysticalOS
   </td>

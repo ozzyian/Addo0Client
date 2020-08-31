@@ -3,6 +3,7 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const DatabaseClient = require('../src/db/database_client');
 const AddonManager = require('../src/services/addon_manager');
+const Addon = require('../src/addon');
 
 /**
  *
@@ -34,7 +35,7 @@ class Main {
       this.aM = new AddonManager(path);
       const savedAddons = await this.db.getAll();
       if (savedAddons.length !== 0) {
-        return savedAddons.map((addon) => JSON.parse(addon.data));
+        return savedAddons.map((addon) => new Addon(JSON.parse(addon.data)));
       } else {
         return [];
       }
@@ -45,8 +46,12 @@ class Main {
       return await this.importAddons();
     });
 
-    ipcMain.handle('update', async (_, addon) => {
-      const filePath = await this.aM.downloadFromUrl(addon);
+    ipcMain.handle('update', async (_, addonData) => {
+      const addon = new Addon(addonData);
+      const filePath = await this.aM.downloadFromUrl(
+        addon.getDownloadUrl(),
+        addon.getVersionName(),
+      );
 
       const extracted = await this.aM.extractAddonFiles(filePath);
 

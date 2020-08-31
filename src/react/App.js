@@ -2,7 +2,7 @@ import React from 'react';
 import AddonTable from './components/AddonTable';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-const ipc = require('electron').ipcRenderer;
+import {ipcRenderer} from 'electron';
 
 /**
  *
@@ -22,7 +22,7 @@ class App extends React.Component {
    *
    */
   async componentDidMount() {
-    const res = await ipc.invoke('app-load');
+    const res = await ipcRenderer.invoke('app-load');
     if (!res) {
       return;
     } else {
@@ -36,7 +36,8 @@ class App extends React.Component {
   async onChange(event) {
     const path = event.target.files[0].path.split('\\');
     path.pop();
-    const addons = await ipc.invoke('init-with-path', path.join('/'));
+    const addons = await ipcRenderer.invoke('init-with-path', path.join('/'));
+    console.log(addons);
     this.setState({initiated: true, addons: addons});
   }
   /**

@@ -3,6 +3,7 @@ const fsPromise = fs.promises;
 const fetch = require('node-fetch');
 const extract = require('extract-zip');
 const lineByLine = require('n-readlines');
+const Addon = require('../addon');
 /**
  * Handles the addons locally.
  */
@@ -54,9 +55,6 @@ class AddonManager {
         data['id'] = line.toString('utf-8').replace(/[^\d.]/g, '');
         idFound = true;
       }
-      if (line.includes('Version:')) {
-        data['version'] = line.toString('utf-8').replace(/[^\d.]/g, '');
-      }
     }
 
     if (idFound) {
@@ -87,19 +85,36 @@ class AddonManager {
 
   /**
    *
-   * @param {*} addonData
+   * @param {Object} addonData
+   * @return {Object}
    */
-  async downloadFromUrl(addonData) {
-    const data = this.extractDownloadData(addonData);
-    const newAddon = await fetch(data.url);
-    const fileStream = fs.createWriteStream(this.wowPath + '/' + data.fileName);
+  extractLatestFileData(addonData) {
+    const gameVersionLatestFileData = addonData.gameVersionLatestFiles.find(
+      (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
+    );
+    const latestFileData = addonData.latestFiles.find(
+      (fileData) =>
+        fileData.fileName === gameVersionLatestFileData.projectFileName,
+    );
+
+    return latestFileData;
+  }
+
+  /**
+   *
+   * @param {String} url
+   * @param {String} fileName
+   */
+  async downloadFromUrl(url, fileName) {
+    const newAddon = await fetch(url);
+    const fileStream = fs.createWriteStream(this.wowPath + '/' + fileName);
     return new Promise((resolve, reject) => {
       newAddon.body.pipe(fileStream);
       newAddon.body.on('error', (err) => {
         reject(err);
       });
       fileStream.on('finish', () => {
-        resolve(this.wowPath + '/' + data.fileName);
+        resolve(this.wowPath + '/' + fileName);
       });
     });
   }
@@ -140,7 +155,9 @@ class AddonManager {
       headers: {
         'Content-Type': 'application/json',
       },
-    }).then((response) => response.json());
+    })
+      .then((response) => response.json())
+      .then((data) => Addon.initFromJSON(data));
   }
   /**
    *
@@ -154,7 +171,26 @@ class AddonManager {
       headers: {
         'Content-Type': 'application/json',
       },
-    }).then((response) => response.json());
+    })
+      .then((response) => response.json())
+      .then((response) => response.map((data) => Addon.initFromJSON(data)));
+  }
+
+  /**
+   * Returns true if there is a new version available.
+   * @param {Object} currentAddonData
+   * @param {Object} remoteAddonData
+   * @return {Boolean}
+   */
+  checkForUpdate(currentAddonData, remoteAddonData) {
+    const currentFileDate = new Date(
+      this.extractLatestFileData(currentAddonData).fileDate,
+    );
+    const remoteFileDate = new Date(
+      this.extractLatestFileData(remoteAddonData).fileDate,
+    );
+
+    return currentFileDate < remoteFileDate;
   }
 }
 
