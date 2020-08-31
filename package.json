@@ -54,7 +54,6 @@
     "enzyme-adapter-react-16": "^1.15.3",
     "enzyme-to-json": "^3.5.0",
     "eslint-config-google": "^0.14.0",
-    "fake-indexeddb": "^3.1.2",
     "nock": "^13.0.4",
     "react-test-renderer": "^16.13.1",
     "tmp": "^0.2.1",
@@ -81,6 +80,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
+      "src/addon.js",
       "src/{db,services}/*.js",
       "src/react/*.js",
       "src/react/components/*.js",
