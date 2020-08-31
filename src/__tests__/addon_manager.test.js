@@ -130,7 +130,7 @@ describe('Tests the functionality of the AddonManager class.', () => {
     });
   });
   describe('getMultipleAddonData()', () => {
-    it('Returns response from output', async () => {
+    it('Returns correct response from output', async () => {
       const aM = new AddonManager(__dirname);
       const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
       const response = JSON.parse(rawdata);
@@ -142,41 +142,35 @@ describe('Tests the functionality of the AddonManager class.', () => {
       expect(actual).toEqual([addon]);
     });
   });
-  describe('extractDownloadData()', () => {
-    it('Returns an object with the url and filename as properties', () => {
-      const aM = new AddonManager(__dirname);
-      const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
-      const addonData = JSON.parse(rawdata);
-      const actual = aM.extractDownloadData(addonData);
-      expect(actual).toEqual({
-        url:
-          'https://edge.forgecdn.net/files/3043/88/DBM-Core-1.13.57-54-gf85328d-classic.zip',
-        fileName: 'DBM-Core-1.13.57-54-gf85328d-classic.zip',
-      });
-    });
-  });
 
-  describe('', () => {
-    it('extractLatestFileData()', () => {
-      const aM = new AddonManager(__dirname);
-      const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
-      const addonData = JSON.parse(rawdata);
-      const expected = addonData.latestFiles[4];
-      const actual = aM.extractLatestFileData(addonData);
-      expect(actual).toEqual(expected);
+  describe('extractAddonFiles()', () => {
+    it('Extracts the contents of the zip file to the correct dir', async () => {
+      const dirPath = __dirname + '/resources/Interface/AddOns';
+      const aM = new AddonManager(__dirname + '/resources');
+      const res = await aM.extractAddonFiles(
+        __dirname +
+          '/resources/Interface/AddOns/AdvancedInterfaceOptions-1.3.4-classic.zip',
+      );
+      expect(res).toBe(true);
+      const dirContents = fs.readdirSync(dirPath);
+      expect(dirContents).toEqual([
+        'AdvancedInterfaceOptions',
+        'AdvancedInterfaceOptions-1.3.4-classic.zip',
+      ]);
     });
   });
 
   describe('checkForUpdate', () => {
-    it('Returns true if update is available', () => {
+    it('Returns the correct value if update is available or not', () => {
       const aM = new AddonManager(__dirname);
       const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
-      const newVersion = JSON.parse(rawdata);
-      const currentVersion = JSON.parse(rawdata);
+      const currentVersion = Addon.initFromJSON(JSON.parse(rawdata));
 
       const newDate = new Date('2020-08-26T23:07:17.033Z');
-      aM.extractLatestFileData(newVersion).fileDate = newDate;
-      expect(aM.checkForUpdate(currentVersion, newVersion)).toBe(true);
+      expect(aM.checkForUpdate(currentVersion.getDate(), newDate)).toBe(true);
+      expect(
+        aM.checkForUpdate(currentVersion.getDate(), currentVersion.getDate()),
+      ).toBe(false);
     });
   });
 

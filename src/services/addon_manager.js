@@ -66,42 +66,6 @@ class AddonManager {
 
   /**
    *
-   * @param {Object} addonData object that contains the data to be extracted
-   * @return {Object}
-   */
-  extractDownloadData(addonData) {
-    const gameVersionLatestFileData = addonData.gameVersionLatestFiles.find(
-      (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
-    );
-    const latestFileData = addonData.latestFiles.find(
-      (fileData) =>
-        fileData.fileName === gameVersionLatestFileData.projectFileName,
-    );
-    return {
-      url: latestFileData.downloadUrl,
-      fileName: latestFileData.fileName,
-    };
-  }
-
-  /**
-   *
-   * @param {Object} addonData
-   * @return {Object}
-   */
-  extractLatestFileData(addonData) {
-    const gameVersionLatestFileData = addonData.gameVersionLatestFiles.find(
-      (fileData) => fileData.gameVersionFlavor === this.gameVersionFlavor,
-    );
-    const latestFileData = addonData.latestFiles.find(
-      (fileData) =>
-        fileData.fileName === gameVersionLatestFileData.projectFileName,
-    );
-
-    return latestFileData;
-  }
-
-  /**
-   *
    * @param {String} url
    * @param {String} fileName
    */
@@ -178,18 +142,11 @@ class AddonManager {
 
   /**
    * Returns true if there is a new version available.
-   * @param {Object} currentAddonData
-   * @param {Object} remoteAddonData
+   * @param {Date} currentFileDate
+   * @param {Date} remoteFileDate
    * @return {Boolean}
    */
-  checkForUpdate(currentAddonData, remoteAddonData) {
-    const currentFileDate = new Date(
-      this.extractLatestFileData(currentAddonData).fileDate,
-    );
-    const remoteFileDate = new Date(
-      this.extractLatestFileData(remoteAddonData).fileDate,
-    );
-
+  checkForUpdate(currentFileDate, remoteFileDate) {
     return currentFileDate < remoteFileDate;
   }
 }
