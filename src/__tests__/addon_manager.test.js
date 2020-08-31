@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import AddonManager from '../services/addon_manager.js';
+import Addon from '../addon';
 import fs from 'fs';
 import tmp from 'tmp';
 import nock from 'nock';
@@ -105,7 +106,7 @@ describe('Tests the functionality of the AddonManager class.', () => {
       tmpDir.removeCallback();
     });
   });
-  describe('getAddonInfo()', () => {
+  describe('getAddonData()', () => {
     const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
     const response = JSON.parse(rawdata);
     nock('https://addons-ecs.forgesvc.net/api/v2/addon')
@@ -115,8 +116,8 @@ describe('Tests the functionality of the AddonManager class.', () => {
     const aM = new AddonManager(__dirname);
 
     it('Returns the correct json response for a valid id', async () => {
-      const actual = await aM.getAddonData('3358');
-      expect(actual).toEqual(response);
+      const actual = await aM.getAddonData(3358);
+      expect(actual).toEqual(Addon.initFromJSON(response));
     });
 
     it('Throws an error when addon data cant be fetched', async () => {
@@ -133,11 +134,12 @@ describe('Tests the functionality of the AddonManager class.', () => {
       const aM = new AddonManager(__dirname);
       const rawdata = fs.readFileSync(__dirname + '/resources/addon_info.json');
       const response = JSON.parse(rawdata);
+      const addon = Addon.initFromJSON(response);
       nock('https://addons-ecs.forgesvc.net/api/v2')
         .post('/addon', [3358, 3358, 3358])
         .reply(200, [response]);
       const actual = await aM.getMultipleAddonData([3358, 3358, 3358]);
-      expect(actual).toEqual([response]);
+      expect(actual).toEqual([addon]);
     });
   });
   describe('extractDownloadData()', () => {

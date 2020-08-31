@@ -3,6 +3,7 @@ const fsPromise = fs.promises;
 const fetch = require('node-fetch');
 const extract = require('extract-zip');
 const lineByLine = require('n-readlines');
+const Addon = require('../addon');
 /**
  * Handles the addons locally.
  */
@@ -101,19 +102,19 @@ class AddonManager {
 
   /**
    *
-   * @param {*} addonData
+   * @param {String} url
+   * @param {String} fileName
    */
-  async downloadFromUrl(addonData) {
-    const data = this.extractDownloadData(addonData);
-    const newAddon = await fetch(data.url);
-    const fileStream = fs.createWriteStream(this.wowPath + '/' + data.fileName);
+  async downloadFromUrl(url, fileName) {
+    const newAddon = await fetch(url);
+    const fileStream = fs.createWriteStream(this.wowPath + '/' + fileName);
     return new Promise((resolve, reject) => {
       newAddon.body.pipe(fileStream);
       newAddon.body.on('error', (err) => {
         reject(err);
       });
       fileStream.on('finish', () => {
-        resolve(this.wowPath + '/' + data.fileName);
+        resolve(this.wowPath + '/' + fileName);
       });
     });
   }
@@ -154,7 +155,9 @@ class AddonManager {
       headers: {
         'Content-Type': 'application/json',
       },
-    }).then((response) => response.json());
+    })
+      .then((response) => response.json())
+      .then((data) => Addon.initFromJSON(data));
   }
   /**
    *
@@ -168,7 +171,9 @@ class AddonManager {
       headers: {
         'Content-Type': 'application/json',
       },
-    }).then((response) => response.json());
+    })
+      .then((response) => response.json())
+      .then((response) => response.map((data) => Addon.initFromJSON(data)));
   }
 
   /**

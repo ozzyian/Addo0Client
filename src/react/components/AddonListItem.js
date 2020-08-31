@@ -18,10 +18,7 @@ class AddonListItem extends React.Component {
       updateAvailable: true,
     };
   }
-  /**
-   *
-   * @param {*} prevState
-   */
+
   /**
    *
    */
@@ -36,45 +33,28 @@ class AddonListItem extends React.Component {
     const result = await complete;
     this.setState({updating: !result, updateAvailable: false});
   }
+
   /**
    * @return {*}
    */
   render() {
+    let stateColumn;
     if (this.state.updateAvailable) {
-      return (
-        <tr>
-          <td>{this.props.addon.id}</td>
-          <td>{this.props.addon.name}</td>
-          <td>
-            <button onClick={this.updateAddon}>Update</button>
-          </td>
-          <td>{this.props.addon.gameVersionLatestFiles[0].projectFileName}</td>
-          <td>{this.props.addon.authors[0].name}</td>
-        </tr>
-      );
+      stateColumn = <button onClick={this.updateAddon}>Update</button>;
     } else if (this.state.updating) {
-      return (
-        <tr>
-          <td>{this.props.addon.id}</td>
-          <td>{this.props.addon.name}</td>
-          <td>
-            <Spinner animation="border" role="status"></Spinner>
-          </td>
-          <td>{this.props.addon.gameVersionLatestFiles[0].projectFileName}</td>
-          <td>{this.props.addon.authors[0].name}</td>
-        </tr>
-      );
+      stateColumn = <Spinner animation="border" role="status"></Spinner>;
     } else {
-      return (
-        <tr>
-          <td>{this.props.addon.id}</td>
-          <td>{this.props.addon.name}</td>
-          <td>Updated</td>
-          <td>{this.props.addon.gameVersionLatestFiles[0].projectFileName}</td>
-          <td>{this.props.addon.authors[0].name}</td>
-        </tr>
-      );
+      stateColumn = 'Updated';
     }
+    return (
+      <tr>
+        <td>{this.props.addon.id}</td>
+        <td>{this.props.addon.name}</td>
+        <td>{stateColumn}</td>
+        <td>{this.props.addon.versionName}</td>
+        <td>{this.props.addon.authors[0].name}</td>
+      </tr>
+    );
   }
 }
 
